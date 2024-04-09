@@ -1,0 +1,51 @@
+{% extends 'dashboard/base.html' %}
+
+{% load static %}
+{% block content %}
+<!-- Content Wrapper START -->
+         <div class="main-content">
+            <div class="page-header no-gutters">
+                <div class="d-md-flex align-items-md-center justify-content-between">
+                    <div class="media m-v-10 align-items-center">
+                        <div class="avatar avatar-image avatar-lg">
+                            <img src="{% static 'dashboard/images/avatars/thumb-3.jpg' %}" alt="">
+                        </div>
+                        <div class="media-body m-l-15">
+                            <h4 class="m-b-0">Xush kelibsiz</h4>
+                            <span class="text-gray">Project Manager</span>
+                        </div>
+                    </div>
+                    <div class="d-md-flex align-items-center d-none">
+                        <div class="media align-items-center m-r-40 m-v-5">
+                            <div class="font-size-27">
+                                <i class="text-primary anticon anticon-profile"></i>
+                            </div>
+                            <div class="d-flex align-items-center m-l-10">
+                                <h2 class="m-b-0 m-r-5">{{categories}}</h2>
+                                <span class="text-gray">Turkumlar</span>
+                            </div>
+                        </div>
+                        <div class="media align-items-center m-r-40 m-v-5">
+                            <div class="font-size-27">
+                                <i class="text-success  anticon anticon-appstore"></i>
+                            </div>
+                            <div class="d-flex align-items-center m-l-10">
+                                <h2 class="m-b-0 m-r-5"> {{products}} </h2>
+                                <span class="text-gray">Mahsulotlar</span>
+                            </div>
+                        </div>
+                        <div class="media align-items-center m-v-5">
+                            <div class="font-size-27">
+                                <i class="text-danger anticon anticon-team"></i>
+                            </div>
+                            <div class="d-flex align-items-center m-l-10">
+                                <h2 class="m-b-0 m-r-5"> {{users}} </h2>
+                                <span class="text-gray">Foydalanuvchilar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Content Wrapper END -->
+{% endblock %}

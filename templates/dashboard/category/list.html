@@ -1,0 +1,122 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+
+
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Do'kon</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" href="#">Turkum</a>
+                <span class="breadcrumb-item active">Ro`yxat</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h4>Kategoriyalar ro`yxati</h4>
+            <div class="m-t-25">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Harakatlar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for q in queryset %}
+                            <tr>
+                                <th scope="row">{{forloop.counter}}</th>
+                                <td>{{q.name}}</td>
+                                <td>
+                                    <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded pull-right" data-toggle="modal" data-target=".bd-example-modal-lg{{forloop.counter}}">
+                                        <i class="anticon anticon-edit"></i>
+                                    </button>
+                                    <!-- Large modal -->
+                                    <div class="modal fade bd-example-modal-lg{{forloop.counter}}">
+                                        <div class="modal-dialog modal-lg">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title h4">{{q.name}}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <i class="anticon anticon-close"></i>
+                                                    </button>
+                                                </div>
+                                                <form action="{% url 'dashboard:category_update' q.code %}" method="post">
+                                                    {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <input type="text" class="form-control" value="{{q.name}}" name="name">
+                                                </div>
+                                                <button type="submit" class="btn btn-primary btn-tone" >O`zgartirish</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Small modal -->
+                                    <button type="button" class="btn btn-icon btn-hover btn-sm btn-rounded" data-toggle="modal" data-target=".bd-example-modal-sm{{forloop.counter}}">
+                                        <i class="anticon anticon-delete"></i>
+                                    </button>
+                                    <div class="modal fade bd-example-modal-sm{{forloop.counter}}">
+                                        <div class="modal-dialog modal-sm">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title h4">{{q.name}}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal">
+                                                        <i class="anticon anticon-close"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <b>{{q.name}} kategoriyani o`chirmoqchimisiz?</b>
+                                                </div>
+                                                <div class="btn-group">
+                                                    <form method="post" action="{% url 'dashboard:category_delete' q.code %}">
+                                                        {% csrf_token %}
+                                                    <button type="submit" class="btn btn-primary btn-tone">Ha</button>
+                                                    <button class="btn btn-danger btn-tone" type="button" data-dismiss="modal">Yo`q</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% if queryset.paginator.num_pages > 1 %}
+                                <div class="pagination-area">
+                                    <nav aria-label="Page navigation example">
+                                        <ul class="pagination justify-content-center">
+                                            {% if queryset.has_previous %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ queryset.previous_page_number }}" aria-label="Oldingisi">&laquo;</a>
+                                            </li>
+                                            {% endif %}
+                                            {% for num in queryset.paginator.page_range %}
+                                                {% if num == queryset.number %}
+                                                    <li class="page-item active"><a class="page-link" href="#" tabindex="-1">{{ num }}</a></li>
+                                                {% elif num > queryset.number|add:'-3' and num < queryset.number|add:'3' %}
+                                                    <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if queryset.has_next %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ queryset.next_page_number }}" aria-label="Keyingisi">&raquo;</a>
+                                            </li>
+                                            {% endif %}
+                                        </ul>
+                                    </nav>
+                                </div>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

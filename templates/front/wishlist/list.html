@@ -1,0 +1,75 @@
+{% extends "front/base.html" %}
+{% block content %}
+
+<main class="main-content">
+    <div class="breadcrumb-area breadcrumb-height" data-bg-image="assets/images/breadcrumb/bg/1-1-1919x388.jpg">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-item">
+                        <h2 class="breadcrumb-heading">Wishlist Page</h2>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>Wishlist</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wishlist-area section-space-y-axis-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="javascript:void(0)">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="product_remove">remove</th>
+                                        <th class="product-thumbnail">images</th>
+                                        <th class="cart-product-name">Product</th>
+                                        <th class="product-price">Unit Price</th>
+                                        <th class="product-stock-status">Stock Status</th>
+                                        <th class="cart_btn">add to cart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for q in queryset %}
+                                    <tr>
+                                        <td class="product_remove">
+                                            <a href="{% url 'front:remove_wishlist' q.product.code %}">
+                                                <i class="pe-7s-close" data-tippy="Remove" data-tippy-inertia="true"
+                                            data-tippy-animation="shift-away" data-tippy-delay="50"
+                                            data-tippy-arrow="true" data-tippy-theme="sharpborder"></i>
+                                            </a>
+                                        </td>
+                                        <td class="product-thumbnail">
+                                            <a href="#">
+                                                <img src="{{q.product.banner_img.url}}" alt="Wishlist Thumbnail" style="width: 200px;" >
+                                            </a>
+                                        </td>
+                                        <td class="product-name"><a href="#">{{q.product.name}}</a></td>
+                                        {% if q.product.discount_price %}
+                                        <td class="product-price"><span class="amount"></span>{{q.product.discount_price}}</td>
+                                        {% else %}
+                                        <td class="product-price"><span class="amount"></span>{{q.product.price}}</td>
+                                        {% endif %}
+                                        <td class="product-stock-status"><span class="in-stock">{% if q.product.stoct_status %} Mavjud {% else %} Mavjud emas {% endif %}</span></td>
+                                        {% if q.product.stoct_status %}
+                                        <td class="cart_btn"><a href="{% url 'front:add_cart' q.product.code %}">add to cart</a></td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock  %}

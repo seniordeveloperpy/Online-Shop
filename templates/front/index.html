@@ -1,0 +1,182 @@
+{% extends 'front/base.html' %}
+{% load static %}
+
+{% block content %}
+        <!-- Begin Slider Area -->
+        <div class="slider-area">
+
+        </div>
+        <!-- Slider Area End Here -->
+
+        <!-- Begin Shipping Area -->
+        <div class="shipping-area section-space-top-100">
+            <div class="container">
+                <div class="shipping-bg">
+                    <div class="row shipping-wrap">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="shipping-item">
+                                <div class="shipping-img">
+                                    <img src="{% static 'front/images/shipping/icon/car.png' %}" alt="Shipping Icon">
+                                </div>
+                                <div class="shipping-content">
+                                    <h2 class="title">Bepul yetkazib berish</h2>
+                                    <p class="short-desc mb-0">3 mln so'mgacha</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mt-4 mt-md-0">
+                            <div class="shipping-item">
+                                <div class="shipping-img">
+                                    <img src="{% static 'front/images/shipping/icon/card.png' %}" alt="Shipping Icon">
+                                </div>
+                                <div class="shipping-content">
+                                    <h2 class="title">Xavfsiz to'lovlar</h2>
+                                    <p class="short-desc mb-0">Bizning to'lov tizimi orqali</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6 mt-4 mt-lg-0">
+                            <div class="shipping-item">
+                                <div class="shipping-img">
+                                    <img src="{% static 'front/images/shipping/icon/service.png' %}" alt="Shipping Icon">
+                                </div>
+                                <div class="shipping-content">
+                                    <h2 class="title">Eng yaxshi xizmatlar</h2>
+                                    <p class="short-desc mb-0">Do'stona & Ajoyib servislar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Shipping Area End Here -->
+
+        <!-- Begin Product Area -->
+        <div class="product-area section-space-top-100">
+            <div class="container">
+                <div class="section-title-wrap">
+                    <h2 class="section-title mb-0">Biznig mahsulotlar</h2>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <ul class="nav product-tab-nav tab-style-1" id="myTab" role="tablist">
+                            {% if categories.paginator.num_pages > 1 %}
+                                {% if categories.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ categories.previous_page_number }}" aria-label="Previous">&laquo;</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                                {% for category in categories %}
+                                    <li class="nav-item" role="presentation">
+                                        <a href="{% url 'front:product_list' category.code %}">
+                                            {{ category.name }}
+                                        </a>
+                                    </li>
+                                {% endfor %}
+
+                            {% if categories.paginator.num_pages > 1 %}
+                                {% if categories.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ categories.next_page_number }}" aria-label="Next">&raquo;</a>
+                                    </li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                        
+                        
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="featured" role="tabpanel" aria-labelledby="featured-tab">
+                                <div class="product-item-wrap row">
+                                    {% for product in products %}
+                                    <div class="col-xl-3 col-md-4 col-sm-6">
+                                        <div class="product-item">
+                                            <div class="product-img">
+                                                <a href="{% url 'front:product_detail' product.code %}">
+                                                    <img class="primary-img" src="{{product.banner_img.url}}" alt="Product Images" >
+                                                </a>
+                                                <div class="product-add-action">
+                                                    <ul>
+                                                        <li>
+                                                            {% if product.liked %}
+                                                            <a href="{% url 'front:remove_wishlist' product.code %}" data-tippy="Remove from wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="fa fa-heart" style="color:red;"></i>
+                                                            </a>
+                                                            {% else %}
+                                                            <a href="{% url 'front:add_wishlist' product.code %}" data-tippy="Add to wishlist" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="fa fa-heart-o" style="color:red;"></i>
+                                                            </a>
+                                                            {% endif %}
+                                                            </li>
+                                                            
+                                                        <li class="quuickview-btn">
+                                                            <a href="{% url 'front:product_detail' product.code %}">
+                                                                <i class="pe-7s-look"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="{% url 'front:add_cart' product.code %}" data-tippy="Add to cart" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                                                                <i class="pe-7s-cart"></i>
+                                                            </a>
+                                                        </li>
+                                                        
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <div class="product-content">
+                                                <a class="product-name" href="{% url 'front:product_detail' product.code %}">{{ product.name }}</a>
+                                                <div class="price-box pb-1">
+                                                    <span class="new-price">{{ product.price }} sum</span>
+                                                </div>
+                                                <div class="rating-box">
+                                                    <ul>
+                                                        {% for i in rating %}
+                                                        {% if i <= mark %}
+                                                        <li><i class="fa fa-star"></i></li>                                      
+                                                        {% else %}
+                                                        <li><i class="fa fa-star-o"></i></li>                                      
+                                                        {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                    {% if products.paginator.num_pages > 1 %}
+                                    <div class="pagination-area">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center">
+                                                {% if products.has_previous %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{products.previous_page_number }}" aria-label="Oldingisi">&laquo;</a>
+                                                </li>
+                                                {% endif %}
+                                                {% for num in products.paginator.page_range %}
+                                                {% if num == products.number %}
+                                                <li class="page-item active"><a class="page-link" href="#" tabindex="-1">{{ num }}</a></li>
+                                                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                                                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                                                {% endif %}
+                                                {% endfor %}
+                                                {% if products.has_next %}
+                                                <li class="page-item">
+                                                    <a class="page-link" href="?page={{products.next_page_number }}" aria-label="Keyingisi">&raquo;</a>
+                                                </li>
+                                                {% endif %}
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% endblock content %}
+
+        

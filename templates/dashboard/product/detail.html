@@ -1,0 +1,149 @@
+{% extends 'dashboard/base.html' %}
+
+{% block content %}
+<div class="main-content">
+    <div class="page-header">
+        <h2 class="header-title">Do'kon</h2>
+        <div class="header-sub-title">
+            <nav class="breadcrumb breadcrumb-dash">
+                <a href="#" class="breadcrumb-item"><i class="anticon anticon-home m-r-5"></i>Dashboard</a>
+                <a class="breadcrumb-item" href="#">Maxsulotlar</a>
+                <span class="breadcrumb-item active">Maxsulot</span>
+            </nav>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <div class="d-flex justify-content-around" >
+                    <h2 class="font-weight-normal m-b-10">{{queryset.category.name}}</h2>
+                    <h2 class="font-weight-normal m-b-10">{{queryset.name}}</h2>
+                </div>
+                <div class="justify-content-around">
+                    <img alt="" class="img-fluid w-30" src="{{queryset.banner_img.url}}" >
+                    <button type="button"  class="btn btn-danger btn-tone m-r-5" data-toggle="modal" data-target=".bd-example-modal-sm"><i class="anticon anticon-delete"></i> O`chirish</button>
+                    <!-- Small modal -->
+                    <div class="modal fade bd-example-modal-sm{{forloop.counter}}">
+                        <div class="modal-dialog modal-sm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title h4">{{queryset.name}}</h5>
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <i class="anticon anticon-close"></i>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <b>{{queryset.name}}ni o`chirmoqchimisiz?</b>
+                                </div>
+                                <div class="btn-group">
+                                    <form method="post" action="{% url 'dashboard:product_delete' queryset.code %}">
+                                        {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary btn-tone">Ha</button>
+                                    <button class="btn btn-danger btn-tone" type="button" data-dismiss="modal">Yo`q</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-t-30">
+                    <p>{{queryset.body}}</p>
+                </div>
+                <div class="d-md-flex m-t-30 align-items-center justify-content-between">
+                    <div class="d-flex align-items-center m-t-10">
+                        {% for i in images %}
+                        <a class="m-r-5 m-b-5" href="javascript:void(0);" data-toggle="tooltip">
+                            <div class="avatar avatar-image" style="width: 30px; height: 30px;">
+                                <img src="{{i.img.url}}" alt="">
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    <div class="m-t-10">
+                        <span class="font-weight-semibold m-r-10 m-b-5 text-dark">Qoldiq: </span>
+                        <span>{{queryset.quantity}}</span>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center m-t-10">
+                    {% for i in videos %}
+                    <div class="card-body">
+                        <video width="320" height="240" controls>
+                            <source src="{{i.video.url}}" type="video/mp4">
+                            Sizning brauzeringiz buni qo'llab quvvatlamaydi.
+                        </video>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="d-md-flex m-t-30 align-items-center justify-content-between">
+                    <div class="m-t-10">
+                        <span class="font-weight-semibold m-r-10 m-b-5 text-dark">Narx: </span>
+                        {% if queryset.discount_price %}
+                        <span><s>{{queryset.price}}</s></span>
+                        {% else %}
+                        <span>{{queryset.price}}</span>
+                        {% endif %}
+                     
+                    </div>
+                    <div class="m-t-10">
+                        <span class="font-weight-semibold m-r-10 m-b-5 text-dark">Chegirmadagi narx: </span>
+                        {% if queryset.discount_price %}
+                        <span>{{queryset.discount_price}}</span>
+                        {% else %}
+                        <button class="btn btn-primary" >Mavjud emas</button>
+                        {% endif %}
+                    </div>
+                    <div class="m-t-10">
+                        <span class="font-weight-semibold m-r-10 m-b-5 text-dark">Yetkazib berish: </span>
+                        {% if queryset.delivery %}
+                        <button class="btn btn-primary" >Mavjud</button>
+                        {% else %}
+                        <button class="btn btn-danger" >Mavjud emas</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+                {% if reviews %}
+                <h5>Izohlar ({{reviews|length}})</h5>
+                <div class="m-t-20">
+                    <ul class="list-group list-group-flush">
+                        {% for r in reviews %}
+                        <li class="list-group-item p-h-0">
+                            <div class="media m-b-15">
+                                <div class="avatar avatar-image">
+                                    {% if r.user.avatar %}
+                                    <img src="{{r.user.avatar.url}}" alt="">
+                                    {% endif %}
+                                </div>
+                                <div class="media-body m-l-20">
+                                    <h6 class="m-b-0">
+                                        <a href="" class="text-dark">{{r.user.username}}</a>
+                                    </h6>
+                                <div class="star-rating m-t-15">
+                                    {% for i in ratings %}
+                                    <input type="radio" id="star{{forloop.counter}}-{{forloop.counter}}" name="rating-{{forloop.counter}}" value="{{forloop.counter}}"  {% if i == r.mark %} checked="" {% endif %} disabled=""><label for="star{{forloop.counter}}-{{forloop.counter}}" title="{{forloop.counter}} star"></label>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <span>{{r.text}}</span>
+                        </li>
+                        {% endfor %}
+                    </ul> 
+                </div> 
+                {% endif %}
+                <div class="m-t-30">
+                    <nav>
+                        <ul class="pagination justify-content-end">
+                            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="#">2</a></li>
+                            <li class="page-item"><a class="page-link" href="#">3</a></li>
+                            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+                        </ul>
+                    </nav>
+                </div>           
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,149 @@
+{% extends 'front/base.html' %}
+{% load static %}
+
+{% block content %}
+<main class="main-content">
+    <div class="breadcrumb-area breadcrumb-height" data-bg-image="assets/images/breadcrumb/bg/1-1-1919x388.jpg" style="background-image: url(&quot;assets/images/breadcrumb/bg/1-1-1919x388.jpg&quot;);">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-lg-12">
+                    <div class="breadcrumb-item">
+                        <h2 class="breadcrumb-heading">Cart Page</h2>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>Cart Page</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cart-area section-space-y-axis-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <form action="javascript:void(0)">
+                        <div class="table-content table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th class="product_remove">remove</th>
+                                        <th class="product-thumbnail">image</th>
+                                        <th class="cart-product-name">Product</th>
+                                        <th class="product-price">Unit Price</th>
+                                        <th class="product-quantity">Quantity</th>
+                                        <th class="product-subtotal">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in queryset %}
+                                    <tr>
+                                        <td class="product_remove">
+                                            <a href="{% url 'front:remove_cart' i.product.code %}">
+                                                <i class="pe-7s-close" data-tippy="Remove" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder" tabindex="0"></i>
+                                            </a>
+                                        </td>
+                                        <td class="product-thumbnail">
+                                            <a href="#">
+                                                <img src="{{i.product.banner_img.url}}" alt="Cart Thumbnail" style="width: 100px;">
+                                            </a>
+                                        </td>
+                                        <td class="product-name"><a href="#">{{i.product.name}}</a></td>
+                                        <td class="product-price"><span class="amount">{{i.product.price}}</span></td>
+                                        {% if cart.status == 1 %}
+                                        <td class="quantity">
+                                            <form method="POST" action="{% url 'front:update_quantity' i.product.code %}">
+                                                {% csrf_token %}
+                                                <div style="display: flex; align-items: center; justify-content: space-between; width: 120px; border: 1px solid #ccc; border-radius: 5px; padding: 5px;">
+                                                    <button style="background-color: #fff; border: 1px solid #ccc; color: #333; cursor: pointer; padding: 5px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;" type="submit" class="dec qtybutton" name="action" value="decrease"><i style="font-size: 14px;" class="fa fa-minus"></i></button>
+                                                    <input style="width: 50px; text-align: center;" class="cart-plus-minus-box" name="quantity" value="{{ i.count }}" type="number">
+                                                    <button style="background-color: #fff; border: 1px solid #ccc; color: #333; cursor: pointer; padding: 5px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;" type="submit" class="inc qtybutton" name="action" value="increase"><i style="font-size: 14px;" class="fa fa-plus"></i></button>
+                                                </div>
+                                                
+                                            </form>
+                                        </td>
+                                        {% else %}
+                                        <td class="product-subtotal"><span class="amount">{{i.count}}</span></td>
+                                        {% endif %}
+                                        <td class="product-subtotal"><span class="amount">{{i.price}}</span></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if cart.status == 1 and queryset|length != 0 %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="coupon-all">
+                                    <div class="coupon2" data-bs-target='#quickModal' data-bs-toggle='modal'>
+                                        <a class="btn btn-dark" id='buyurtma-berish'> Buyurtma berish </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% elif cart.status == 4 %}
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="coupon-all">
+                                    <div class="coupon2" data-bs-target='#izohModal' data-bs-toggle='modal'>
+                                        <a class="btn btn-dark" id='izoh-qoldirish'> Izoh qoldirish </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-md-5 ml-auto">
+                                <div class="cart-page-total">
+                                    <h2>Cart totals</h2>
+                                    <ul>
+                                        <li>Subtotal <span>{{cart.price}}</span></li>
+                                        <li>Total <span>{{cart.total_price}}</span></li>
+                                    </ul>
+                                    <a href="#">Proceed to checkout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="modal quick-view-modal fade" id="quickModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="quickModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered d-flex justify-content-center">
+      <div class="modal-content" style="width: 430px; height: 280px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="quickModal">Buyurtmani tasdiqlash</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div class="modal-wrap row">
+            <h5>Tavarlar soni: <span>{{ queryset|length }}</span></h5><br>
+            
+            <div style="display: flex; justify-content: space-around;">  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close" data-tippy="Close" data-tippy-inertia="true" data-tippy-animation="shift-away" data-tippy-delay="50" data-tippy-arrow="true" data-tippy-theme="sharpborder">
+                Ortga
+              </button>
+              
+              <a href="{% url 'front:product_order' %}" class="btn btn-secondary" id="buyurtma-berish"> Tasdiqlash </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    
+  
+  
+  
+
+
+{% endblock content %}
+    
